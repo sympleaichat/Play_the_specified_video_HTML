@@ -4,11 +4,11 @@
 <title>Video File Selector</title>
 <style>
     body {
-        /* —]”’‚ÆƒXƒNƒ[ƒ‹‚ğíœ */
+        /* ä½™ç™½ã¨ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’å‰Šé™¤ */
         margin: 0;
         overflow: hidden; 
         background-color: black;
-        /* “®‰æ‚ª“Ç‚İ‚Ü‚ê‚é‚Ü‚Åƒtƒ@ƒCƒ‹‘I‘ğ‚ğ’†‰›‚É•\¦ */
+        /* å‹•ç”»ãŒèª­ã¿è¾¼ã¾ã‚Œã‚‹ã¾ã§ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠã‚’ä¸­å¤®ã«è¡¨ç¤º */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -16,7 +16,7 @@
         flex-direction: column;
     }
     #video-player {
-        /* ‰Šúó‘Ô‚Å‚Í”ñ•\¦ */
+        /* åˆæœŸçŠ¶æ…‹ã§ã¯éè¡¨ç¤º */
         display: none; 
         width: 100vw;
         height: 100vh;
@@ -26,7 +26,7 @@
         left: 0;
     }
     #file-input {
-        /* Œ©‚½–Ú‚æ‚è‚à‹@”\«‚ğ—Dæ‚µA‘I‘ğƒ{ƒ^ƒ“‚ğ•\¦ */
+        /* è¦‹ãŸç›®ã‚ˆã‚Šã‚‚æ©Ÿèƒ½æ€§ã‚’å„ªå…ˆã—ã€é¸æŠãƒœã‚¿ãƒ³ã‚’è¡¨ç¤º */
         padding: 10px;
         font-size: 16px;
         z-index: 10;
@@ -41,50 +41,46 @@
     
     <video id="video-player" loop muted autoplay></video>
 
-    <script>
+<script>
         const fileInput = document.getElementById('file-input');
         const videoPlayer = document.getElementById('video-player');
 
-        // 1. ƒtƒ@ƒCƒ‹‚ª‘I‘ğ‚³‚ê‚½‚Æ‚«‚Ìˆ—
+        // 1. ãƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚ŒãŸã¨ãã®å‡¦ç†
         fileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             
             if (file && file.type.startsWith('video/')) {
-                // ‘I‘ğ‚³‚ê‚½ƒ[ƒJƒ‹ƒtƒ@ƒCƒ‹‚Ìˆê“I‚ÈURL‚ğì¬
+                // é¸æŠã•ã‚ŒãŸãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã®ä¸€æ™‚çš„ãªURLã‚’ä½œæˆ
                 const videoURL = URL.createObjectURL(file);
                 
-                // “®‰æƒvƒŒƒCƒ„[‚Éƒ\[ƒX‚ğİ’è
+                // å‹•ç”»ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚½ãƒ¼ã‚¹ã‚’è¨­å®š
                 videoPlayer.src = videoURL;
                 
-                // “®‰æƒvƒŒƒCƒ„[‚ğ•\¦‚µAƒtƒ@ƒCƒ‹‘I‘ğƒ{ƒ^ƒ“‚ğ”ñ•\¦‚É‚·‚é
+                // å‹•ç”»ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¡¨ç¤ºã—ã€ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠãƒœã‚¿ãƒ³ã‚’éè¡¨ç¤ºã«ã™ã‚‹
                 videoPlayer.style.display = 'block';
                 fileInput.style.display = 'none';
 
-                // ©“®Ä¶ŠJniautoplay‘®«‚ª‚ ‚è‚Ü‚·‚ªA”O‚Ì‚½‚ßj
+                // è‡ªå‹•å†ç”Ÿé–‹å§‹
                 videoPlayer.play().catch(error => {
-                    console.log('Autoplay failed:', error);
-                    // ƒuƒ‰ƒEƒU‚Ì§ŒÀ‚Å©“®Ä¶‚ªƒuƒƒbƒN‚³‚ê‚½ê‡‚ÍAƒ†[ƒU[‚ÉƒNƒŠƒbƒN‚ğ‘£‚·‚È‚Ç‚Ì‘Î‰‚ª•K—v
+                    console.warn('Autoplay failed:', error);
                 });
 
-                // “®‰æ‚Ì“Ç‚İ‚İ‚ªŠ®—¹‚µ‚½‚çAˆÈ‘O‚ÌObjectURL‚ğ‰ğ•ú‚µ‚Äƒƒ‚ƒŠ‚ğß–ñ
-                videoPlayer.onloadeddata = () => {
-                    URL.revokeObjectURL(videoURL);
-                };
+                // âš ï¸ æ³¨æ„: ä»¥å‰ã® onloadeddata ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚
+                // URL.revokeObjectURL ã‚’å‰Šé™¤ã™ã‚‹ã“ã¨ã§ã€å‹•ç”»å…¨ä½“ãŒå®‰å®šã—ã¦èª­ã¿è¾¼ã¾ã‚Œã¾ã™ã€‚
 
             } else {
                 alert('Select a video file.');
             }
         });
 
-        // 2. ƒNƒŠƒbƒN‚Åƒuƒ‰ƒEƒU‚Ì‘S‰æ–Ê•\¦ƒ‚[ƒh‚ÉØ‚è‘Ö‚¦‚éˆ—
+        // 2. ã‚¯ãƒªãƒƒã‚¯ã§ãƒ–ãƒ©ã‚¦ã‚¶ã®å…¨ç”»é¢è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›¿ãˆã‚‹å‡¦ç† (å¤‰æ›´ãªã—)
         document.addEventListener('click', function() {
-            // “®‰æ‚ª•\¦‚³‚ê‚Ä‚¢‚éê‡‚Ì‚İ‘S‰æ–Ê‰»‚ğ‚İ‚é
             if (videoPlayer.style.display === 'block') {
                 if (videoPlayer.requestFullscreen) {
                     videoPlayer.requestFullscreen();
-                } else if (videoPlayer.webkitRequestFullscreen) { /* Safari */
+                } else if (videoPlayer.webkitRequestFullscreen) {
                     videoPlayer.webkitRequestFullscreen();
-                } else if (videoPlayer.msRequestFullscreen) { /* IE11 */
+                } else if (videoPlayer.msRequestFullscreen) {
                     videoPlayer.msRequestFullscreen();
                 }
             }
