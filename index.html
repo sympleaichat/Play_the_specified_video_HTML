@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Video File Selector</title>
+<style>
+    body {
+        /* 余白とスクロールを削除 */
+        margin: 0;
+        overflow: hidden; 
+        background-color: black;
+        /* 動画が読み込まれるまでファイル選択を中央に表示 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+    #video-player {
+        /* 初期状態では非表示 */
+        display: none; 
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover; 
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #file-input {
+        /* 見た目よりも機能性を優先し、選択ボタンを表示 */
+        padding: 10px;
+        font-size: 16px;
+        z-index: 10;
+        background-color: white;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+    
+    <input type="file" id="file-input" accept="video/*">
+    
+    <video id="video-player" loop muted autoplay></video>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const videoPlayer = document.getElementById('video-player');
+
+        // 1. ファイルが選択されたときの処理
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            
+            if (file && file.type.startsWith('video/')) {
+                // 選択されたローカルファイルの一時的なURLを作成
+                const videoURL = URL.createObjectURL(file);
+                
+                // 動画プレイヤーにソースを設定
+                videoPlayer.src = videoURL;
+                
+                // 動画プレイヤーを表示し、ファイル選択ボタンを非表示にする
+                videoPlayer.style.display = 'block';
+                fileInput.style.display = 'none';
+
+                // 自動再生開始（autoplay属性がありますが、念のため）
+                videoPlayer.play().catch(error => {
+                    console.log('自動再生に失敗しました:', error);
+                    // ブラウザの制限で自動再生がブロックされた場合は、ユーザーにクリックを促すなどの対応が必要
+                });
+
+                // 動画の読み込みが完了したら、以前のObjectURLを解放してメモリを節約
+                videoPlayer.onloadeddata = () => {
+                    URL.revokeObjectURL(videoURL);
+                };
+
+            } else {
+                alert('動画ファイルを選択してください。');
+            }
+        });
+
+        // 2. クリックでブラウザの全画面表示モードに切り替える処理
+        document.addEventListener('click', function() {
+            // 動画が表示されている場合のみ全画面化を試みる
+            if (videoPlayer.style.display === 'block') {
+                if (videoPlayer.requestFullscreen) {
+                    videoPlayer.requestFullscreen();
+                } else if (videoPlayer.webkitRequestFullscreen) { /* Safari */
+                    videoPlayer.webkitRequestFullscreen();
+                } else if (videoPlayer.msRequestFullscreen) { /* IE11 */
+                    videoPlayer.msRequestFullscreen();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
