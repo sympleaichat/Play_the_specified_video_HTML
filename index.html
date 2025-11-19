@@ -62,7 +62,7 @@
 
                 // 自動再生開始（autoplay属性がありますが、念のため）
                 videoPlayer.play().catch(error => {
-                    console.log('自動再生に失敗しました:', error);
+                    console.log('Autoplay failed:', error);
                     // ブラウザの制限で自動再生がブロックされた場合は、ユーザーにクリックを促すなどの対応が必要
                 });
 
@@ -72,7 +72,7 @@
                 };
 
             } else {
-                alert('動画ファイルを選択してください。');
+                alert('Select a video file.');
             }
         });
 
